@@ -2,14 +2,14 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useEffect, useState } from 'react';
-
+import Cart from './Cart';
 
 export default function Products() {
     const [products, setProducts] = useState([]);
+    const [addToCartItem, setAddToCartItem] = useState([]);
 
     useEffect(() => {
         fetch('https://fakestoreapi.com/products')
@@ -20,6 +20,12 @@ export default function Products() {
             })
     }, [])
 
+
+    console.log(addToCartItem);
+    const addtocartfunction = (item) => {
+        console.log(item);
+        setAddToCartItem((prevItems)=>[...prevItems,item])
+    }
     return (
         <>
             <Box sx={{ flexGrow: 1 }}>
@@ -35,22 +41,23 @@ export default function Products() {
                     </Toolbar>
                 </AppBar>
             </Box>
-          
 
-        
+
+
 
             <div className="container-fluid">
                 <div className="row">
 
                     {products && products.map((item) => (
                         <div key={item.id}>
-                            <div className="col-sm-3" style={{ background: 'yellow' }}>
+                            <div className="col-sm-3">
                                 <div className="card-sm-9" style={{ background: 'pink' }}>
                                     <img src={item.image} className="card-img-top" alt="Product Image" style={{ height: '200px', objectFit: 'cover' }} />
                                     <div className="card-body">
                                         <h5 className="card-title">INR: {item.price}</h5>
                                         <p className="card-text">{item.description}</p>
-                                        <a href="#" className="btn btn-primary">Add to Cart</a>
+                                        {/* <a href="#" className="btn btn-primary">Add to Cart</a> */}
+                                        <Button onClick={() => addtocartfunction(item)}>Add to Cart</Button>
                                     </div>
                                 </div>
                             </div>
@@ -61,10 +68,11 @@ export default function Products() {
 
             </div>
 
-           
+            <Cart addToCartItem={addToCartItem} />
 
 
 
         </>
     );
 }
+
